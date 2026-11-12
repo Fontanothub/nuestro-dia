@@ -128,8 +128,9 @@ begin
   if v_couple is not null then return v_code; end if;
 
   loop
-    v_code := upper(substr(translate(encode(gen_random_bytes(8), 'base64'), '+/=0O1IL', ''), 1, 6));
-    exit when char_length(v_code) = 6 and not exists (select 1 from couples where code = v_code);
+    select string_agg(substr('ABCDEFGHJKMNPQRSTUVWXYZ23456789', 1 + floor(random() * 31)::int, 1), '')
+      into v_code from generate_series(1, 6);
+    exit when not exists (select 1 from couples where code = v_code);
   end loop;
 
   insert into couples (code) values (v_code) returning id into v_couple;

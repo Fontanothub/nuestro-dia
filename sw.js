@@ -1,5 +1,5 @@
 // Service worker: deja la app disponible sin conexión y muestra las notificaciones.
-const VERSION = "nd-v1";
+const VERSION = "nd-v2";
 const SHELL = ["./", "index.html", "styles.css", "app.js", "config.js", "manifest.webmanifest", "icons/icon-192.png"];
 
 self.addEventListener("install", (e) => {

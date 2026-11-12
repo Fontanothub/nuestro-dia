@@ -92,8 +92,8 @@ input,select{background:var(--sunk);border:1px solid var(--line);border-radius:1
 .glass .water{fill:var(--c);transition:y .45s cubic-bezier(.3,1.4,.5,1),height .45s cubic-bezier(.3,1.4,.5,1)}
 .glass .shine{fill:#fff;opacity:.35}
 .caps{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:150px}
-.cap{width:22px;height:44px;border-radius:11px;border:2.5px solid var(--c);background:linear-gradient(var(--c) 0 50%,transparent 50%);opacity:.9;transition:transform .3s}
-.cap.on{background:transparent;border-style:dashed;opacity:.45;transform:rotate(18deg) scale(.92)}
+.cap{width:22px;height:44px;border-radius:11px;border:2.5px dashed color-mix(in srgb,var(--c) 55%,transparent);background:transparent;transition:transform .3s,background .3s}
+.cap.on{border-style:solid;border-color:var(--c);background:linear-gradient(var(--c) 0 50%,color-mix(in srgb,var(--c) 35%,transparent) 50%);transform:rotate(-18deg)}
 .mine .cap{width:26px;height:52px;border-radius:13px}
 .ringviz{width:76px;height:76px}
 .ringviz .trk{fill:none;stroke:var(--glass);stroke-width:9}
