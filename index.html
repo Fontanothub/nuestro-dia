@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nuestro Día</title>
+<meta name="description" content="Agua, pastillas y hábitos, registrados en pareja.">
+<meta name="theme-color" content="#E9F0F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1619" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nuestro Día">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <div class="date" id="date"></div>
+      <h1>Nuestro día</h1>
+    </div>
+    <div class="streak" id="streak" hidden>Racha juntos <b id="streakN">0</b> <span id="streakU">días</span></div>
+  </header>
+
+  <div id="status" class="status">Cargando…</div>
+
+  <!-- Falta configurar -->
+  <section id="vSetup" class="panel" hidden>
+    <h2>Falta conectar la base de datos</h2>
+    <p>Completa <code>config.js</code> con los datos de tu proyecto de Supabase. Los pasos están en el README.</p>
+  </section>
+
+  <!-- Iniciar sesión -->
+  <form id="vAuth" class="panel" hidden>
+    <h2 id="authTitle">Entrar</h2>
+    <p id="authHint">Usa el mismo correo cada vez. Así tus registros te siguen en cualquier celular.</p>
+    <label class="field">Correo<input id="email" type="email" autocomplete="email" required></label>
+    <label class="field">Contraseña<input id="password" type="password" autocomplete="current-password" minlength="6" required></label>
+    <button class="btn" type="submit" id="authBtn">Entrar</button>
+    <button class="link" type="button" id="authToggle">¿Primera vez? Crear cuenta</button>
+    <p class="err" id="authErr" hidden></p>
+  </form>
+
+  <!-- Unirse a la pareja -->
+  <section id="vJoin" class="panel" hidden>
+    <h2>¿Cómo te llamamos?</h2>
+    <label class="field">Tu nombre o apodo<input id="nickJoin" maxlength="24" autocomplete="nickname" placeholder="Ej. Pao"></label>
+    <div class="split">
+      <div class="choice">
+        <h3>Soy la primera persona</h3>
+        <p>Crea su espacio y comparte el código con tu pareja.</p>
+        <button class="btn" id="createBtn" type="button">Crear nuestro espacio</button>
+      </div>
+      <div class="choice">
+        <h3>Ya tengo un código</h3>
+        <div class="row">
+          <input id="codeJoin" maxlength="6" placeholder="ABC123" autocapitalize="characters" autocomplete="off" style="text-transform:uppercase">
+          <button class="btn" id="joinBtn" type="button">Unirme</button>
+        </div>
+      </div>
+    </div>
+    <p class="err" id="joinErr" hidden></p>
+  </section>
+
+  <!-- Principal -->
+  <section id="vMain" class="main" hidden>
+    <div id="installHint" class="panel hint" hidden></div>
+
+    <section class="duo" id="duo" aria-label="Progreso de hoy"></section>
+    <div id="nudgeBanner" class="nudge" role="alert" hidden></div>
+
+    <div id="invite" class="panel" hidden>
+      <h2>Falta tu pareja</h2>
+      <p>Pídele que instale la app, cree su cuenta y escriba este código:</p>
+      <div class="code" id="inviteCode">——</div>
+      <button class="btn soft" type="button" data-act="copyCode">Copiar código y enlace</button>
+    </div>
+
+    <div id="habits"></div>
+
+    <section class="week" id="weekSec" hidden>
+      <div class="row between">
+        <h2>Últimos 7 días</h2>
+        <div class="legend"><span style="--c:var(--me)" id="lgMe">Tú</span><span style="--c:var(--partner)" id="lgP">Pareja</span></div>
+      </div>
+      <div class="weekgrid" id="week"></div>
+    </section>
+
+    <details class="panel" id="manage">
+      <summary>Editar hábitos y recordatorios</summary>
+      <div class="hlist" id="hlist"></div>
+      <form id="addForm" class="row end">
+        <label class="field wide">Nombre
+          <input id="hName" maxlength="40" placeholder="Ej. Vitamina D, Anticonceptiva" required>
+        </label>
+        <label class="field">Tipo
+          <select id="hType">
+            <option value="water">Agua (vasos)</option>
+            <option value="pill">Pastilla</option>
+            <option value="other">Otro</option>
+          </select>
+        </label>
+        <label class="field">Meta al día
+          <input id="hGoal" type="number" min="1" max="30" value="8" required>
+        </label>
+        <label class="field">Para
+          <select id="hFor">
+            <option value="both">Los dos</option>
+            <option value="me">Solo yo</option>
+            <option value="partner">Solo mi pareja</option>
+          </select>
+        </label>
+        <label class="field">Recordar a las
+          <input id="hTime" type="time">
+        </label>
+        <button class="btn" type="submit">Agregar</button>
+      </form>
+    </details>
+
+    <details class="panel" id="settings">
+      <summary>Ajustes</summary>
+      <div class="setrow">
+        <div><b>Notificaciones</b><p id="pushState">—</p></div>
+        <div class="row">
+          <button class="btn" type="button" id="pushBtn">Activar</button>
+          <button class="btn soft" type="button" id="pushTest" hidden>Probar</button>
+        </div>
+      </div>
+      <form class="setrow" id="nickForm">
+        <label class="field wide">Tu apodo<input id="nickEdit" maxlength="24"></label>
+        <button class="btn soft" type="submit">Guardar</button>
+      </form>
+      <div class="setrow">
+        <div><b>Código de pareja</b><p id="codeShow">—</p></div>
+        <button class="btn soft" type="button" id="logout">Cerrar sesión</button>
+      </div>
+    </details>
+  </section>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
